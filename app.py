@@ -40,6 +40,8 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
+        f"/api/v1.0/<start><br/>"
+        f"/api/v1.0/<start>/<end>"
 
     )
 
@@ -107,6 +109,13 @@ def temp_obs():
         temp_obs.append(temp_obs_dict)
 
     return jsonify(temp_obs)
+
+@app.route("/api/v1.0/<start>")
+def start_date():
+    session = Session(engine)
+
+    date_start_stats = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).\
+        filter(Measurement.date >= <start>).all()
 
 if __name__ == '__main__':
     app.run(debug=True)
