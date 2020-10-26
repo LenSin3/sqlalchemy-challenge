@@ -4,7 +4,7 @@ import datetime as dt
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, func
+from sqlalchemy import create_engine, func, distinct
 
 from flask import Flask, jsonify
 
@@ -67,3 +67,15 @@ def precipitation():
         all_precipitation.append(precipitation_dict)
 
     return jsonify(all_precipitation)
+
+@app.route("/api/v1.0/stations")
+def stations():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    # Query list of distinct stations in the dataset
+    stations_dstnct = session.query(distinct(Measurement.station)).all()
+
+    session.close()
+
+    return jsonify(stations_dstnct)
