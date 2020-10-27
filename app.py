@@ -115,14 +115,54 @@ def temp_obs():
 @app.route("/api/v1.0/<start>")
 def start_date(start):
     session = Session(engine)
+    sel = [Measurement.date, func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
+    date_start_stats = session.query(*sel).filter(Measurement.date >= start).group_by(Measurement.date).all()
 
-    for start in session.query(Measurement.date):   
-    
-        date_start_stats = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start).all()
     session.close()
 
+    start_stats = []
+
+   
+    for date, tmin, tmax, tavg in date_start_stats:
+        stats_dict = {}
+        stats_dict['date'] = date
+        stats_dict['tmin'] = tmin
+        stats_dict['tmax'] = tmax
+        stats_dict['tavg'] = tavg
+        start_stats.append(stats_dict)
+
+        return jsonify(stats_dict)
     
-    return jsonify(date_start_stats)
+    
+    return jsonify({"error": f" {start} not found."}), 404
+
+
+@app.route("/api/v1.0/<start>/<end>")
+def start_end_date(start, end):
+
+    session = Session(engine)
+    sel = [Measurement.date, func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
+    date_start_end_stats = session.query(*sel).filter(Measurement.date >= start).\
+        filter(Measurement.date <= end).group_by(Measurement.date).all()
+
+    session.close()
+
+    start_end_stats = []
+
+   
+    for date, tmin, tmax, tavg in date_start_end_stats:
+        stats_end_dict = {}
+        stats_end_dict['date'] = date
+        stats_end_dict['tmin'] = tmin
+        stats_end_dict['tmax'] = tmax
+        stats_end_dict['tavg'] = tavg
+        start_end_stats.append(stats_end_dict)
+
+        return jsonify(start_end_stats)
+    
+    
+    return jsonify({"error": f" {start} and {end} not found."}), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)
