@@ -110,12 +110,19 @@ def temp_obs():
 
     return jsonify(temp_obs)
 
+
+
 @app.route("/api/v1.0/<start>")
-def start_date():
+def start_date(start):
     session = Session(engine)
 
-    date_start_stats = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).\
-        filter(Measurement.date >= <start>).all()
+    for start in session.query(Measurement.date):   
+    
+        date_start_stats = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start).all()
+    session.close()
+
+    
+    return jsonify(date_start_stats)
 
 if __name__ == '__main__':
     app.run(debug=True)
