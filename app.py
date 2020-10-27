@@ -75,12 +75,26 @@ def stations():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
+    
+
     # Query list of distinct stations in the dataset
     stations_dstnct = session.query(distinct(Measurement.station)).all()
 
     session.close()
 
-    return jsonify(stations_dstnct)
+    statn_lst = []
+
+    for stations in stations_dstnct:
+
+
+        statn_dict = {}
+
+        statn_dict['stations'] = stations
+
+        statn_lst.append(statn_dict)
+
+
+    return jsonify(statn_lst)
 
 @app.route("/api/v1.0/tobs")
 def temp_obs():
@@ -141,7 +155,7 @@ def start_date(start):
 def start_end_date(start, end):
 
     session = Session(engine)
-    sel = [Measurement.date, func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
+    sel = [func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)]
     date_start_end_stats = session.query(*sel).filter(Measurement.date >= start).\
         filter(Measurement.date <= end).group_by(Measurement.date).all()
 
@@ -150,9 +164,9 @@ def start_end_date(start, end):
     start_end_stats = []
 
    
-    for date, tmin, tmax, tavg in date_start_end_stats:
+    for tmin, tmax, tavg in date_start_end_stats:
         stats_end_dict = {}
-        stats_end_dict['date'] = date
+
         stats_end_dict['tmin'] = tmin
         stats_end_dict['tmax'] = tmax
         stats_end_dict['tavg'] = tavg
