@@ -57,7 +57,76 @@ The main tasks to be accomplished are seen below:
   - Dynamic route ('**/api/v1.0/<start>/<end>**')  to return a JSON list of the minimum temperature, the average temperature, and the max temperature for a given start and end date.
 
 
+### **Bonus Tasks**
+
+The following tasks were also completed as bonus:
+
+#### **Temperature Analysis I**
+
+- Identify the average temperature in June at all stations across all available years in the dataset. Do the same for December temperature.
+
+- Use the t-test to determine whether the difference in the means, if any, is statistically significant.
 
 
+#### **Temperature Analysis II**
+
+- Use the `calc_temps` function to calculate the min, avg, and max temperatures for your trip using the matching dates from the previous year.
+
+- Plot the min, avg, and max temperature from previous query as a bar chart.
 
 
+#### **Daily Rainfall Average**
+
+- Calculate the rainfall per weather station using the previous year's matching dates.
+
+- Calculate the daily normals. Normals are the averages for the min, avg, and max temperatures. Use the `daily_normals` function that will calculate the daily normals for a specific date.
+
+- Use Pandas to plot an area plot (`stacked=False`) for the daily normals.
+
+
+## **Dependencies**
+
+### **Jupyter Notebook**
+
+- SQLALchemy ORM
+
+- Pandas
+
+- Matplotlib
+
+- Datetime
+
+- Scipy
+
+
+### **Python script**
+
+- Flask
+
+- SQLALchemy ORM
+
+- Datetime
+
+
+## **Environment**
+
+- SQLite database
+
+- Python 3.6
+
+
+## **Files**
+
+- **climate_starter.ipynb** containing Precipitation and Station analysis
+
+- **app.y** is the climate app created using Flask API and queries from previous analysis.
+
+- **daily_del_precipitation.png** plot of precipitation data.
+
+- **tobs_hist.png** histogram of observed temperatures.
+
+- **trip_bar_chart.png** bar chart with error bar of average temperature.
+
+- **daily_rainfall.png** area plot of precipitation data.
+
+- **Resources** folder containing **hawaii.sqlite** database.
